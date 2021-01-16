@@ -20,6 +20,11 @@ class Shape(NamedTuple):
         arrangements falling outside those bounds.
         """
 
+    def corners(self) -> FrozenSet["Point"]:
+        """Return a frozenset of the corners of this Shape."""
+        corner_points = (p.corners() for p in self.points)
+        return frozenset.union(*corner_points) - self.sides() - self.points
+
     def sides(self) -> FrozenSet["Point"]:
         """Return a frozenset of the sides of this Shape."""
         side_points = (p.sides() for p in self.points)
