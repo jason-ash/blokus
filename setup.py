@@ -22,12 +22,7 @@ setup(
     packages=find_packages(),
     install_requires=[],
     extras_require={
-        "dev": [
-            "black==20.8b1",
-            "pre-commit==2.9.3",
-            "pylint==2.6.0",
-            "mypy==0.790",
-        ]
+        "dev": ["black==20.8b1", "pre-commit==2.9.3", "pylint==2.6.0", "mypy==0.790"]
     },
     include_package_data=True,
     package_data={"blokus": ["../README.md", "../LICENSE.md", "../MANIFEST.in"]},
@@ -39,7 +34,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
     ],
     test_suite="tests",
     zip_safe=False,
