@@ -38,13 +38,13 @@ class Shape(NamedTuple):
     def reflect(self, x: Optional[int] = None, y: Optional[int] = None) -> "Shape":
         """Return a new shape by reflecting over x and/or y lines."""
         origin = self.origin.reflect(x, y)
-        reflected = [point.reflect(x, y) for point in self.points]
+        reflected = (point.reflect(x, y) for point in self.points)
         return Shape(origin=origin, points=frozenset(reflected))
 
     def rotate(self, around: Point, degrees: int) -> "Shape":
         """Return a new shape rotated by n degrees around a Point."""
         origin = self.origin.rotate(around, degrees)
-        rotated = [point.rotate(around, degrees) for point in self.points]
+        rotated = (point.rotate(around, degrees) for point in self.points)
         return Shape(origin=origin, points=frozenset(rotated))
 
     @classmethod
