@@ -1,4 +1,4 @@
-name: develop
+name: Blokus CI
 on:
   push:
     branches: [master]
@@ -11,7 +11,8 @@ jobs:
       matrix:
         python_version: [3.6, 3.7, 3.8, 3.9]
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
@@ -29,4 +30,4 @@ jobs:
           pre-commit run --all-files
       - name: Run test suite
         run: |
-          python -m unittest discover
+          python -m unittest discover --verbose
