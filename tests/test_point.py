@@ -62,3 +62,12 @@ class TestPoint(unittest.TestCase):
         point = Point(4, 4)
         around = Point(5, 5)
         self.assertRaises(ValueError, point.rotate, around, 120)
+
+    def test_rotate(self):
+        """Test some sample rotations"""
+        point = Point(8, 10)
+        around = Point(7, 7)
+        self.assertEqual(point.rotate(around=around, degrees=90), Point(10, 6))
+        self.assertEqual(point.rotate(around=around, degrees=180), Point(6, 4))
+        self.assertEqual(point.rotate(around=around, degrees=270), Point(4, 8))
+        self.assertEqual(point.rotate(around=around, degrees=-90), Point(4, 8))
