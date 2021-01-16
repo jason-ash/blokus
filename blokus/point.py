@@ -28,6 +28,14 @@ class Point(NamedTuple):
         ]
         return frozenset(points)
 
+    def is_corner(self, other: "Point") -> bool:
+        """Return a boolean indicating whether two points are corners of each other."""
+        return other in self.corners()
+
+    def is_side(self, other: "Point") -> bool:
+        """Return a boolean indicating whether two points are sides of each other."""
+        return other in self.sides()
+
     # pylint: disable=invalid-name
     def reflect(self, x: Optional[int] = None, y: Optional[int] = None) -> "Point":
         """
