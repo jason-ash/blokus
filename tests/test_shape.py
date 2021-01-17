@@ -41,8 +41,8 @@ class TestShape(unittest.TestCase):
         self.assertEqual(shape.rotate(around, 180).origin, origin.rotate(around, 180))
         self.assertEqual(shape.rotate(around, 270).origin, origin.rotate(around, 270))
 
-    def test_complex_sides(self):
-        """Test returning the sides of a complex shape"""
+    def test_w_sides(self):
+        """Test returning the sides of the W shape"""
         shape = Shape.W(Point(5, 5))
         sides = [
             Point(3, 4),
@@ -57,8 +57,8 @@ class TestShape(unittest.TestCase):
         ]
         self.assertEqual(shape.sides(), frozenset(sides))
 
-    def test_complex_corners(self):
-        """Test returning the corners of a complex shape"""
+    def test_w_corners(self):
+        """Test returning the corners of the W shape"""
         shape = Shape.W(Point(5, 5))
         corners = [
             Point(3, 3),
@@ -71,8 +71,8 @@ class TestShape(unittest.TestCase):
         ]
         self.assertEqual(shape.corners(), frozenset(corners))
 
-    def test_complex_rotation(self):
-        """Test rotating a complex shape"""
+    def test_w_rotation(self):
+        """Test rotating the W shape"""
         origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.rotate(around=shape.origin, degrees=180)
@@ -86,8 +86,8 @@ class TestShape(unittest.TestCase):
         self.assertEqual(shape.points, frozenset(points))
         self.assertEqual(shape.origin, origin)
 
-    def test_complex_reflection(self):
-        """Test reflecting a complex shape"""
+    def test_w_reflection(self):
+        """Test reflecting the W shape"""
         origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.reflect(x=8)
@@ -100,3 +100,61 @@ class TestShape(unittest.TestCase):
         ]
         self.assertEqual(shape.points, frozenset(points))
         self.assertEqual(shape.origin, Point(11, 5))
+
+    def test_complex_shape_corners(self):
+        """Test identifying the corners of a complex shape"""
+        #    [X]   [X]
+        # [X]   [ ]   [X]
+        #    [ ][ ][ ]         [X]
+        #    [ ]      [ ][ ][ ]
+        # [X]   [ ][ ]   [ ][ ]   [X]
+        #    [X]   [ ][ ]      [ ]
+        #       [ ]   [ ]   [ ][ ]
+        # [ ][ ][ ]         [ ]   [X]
+        # [ ]      [X]   [X]   [X]
+        origin = Point(0, 0)
+        points = [
+            Point(0, 0),
+            Point(0, 1),
+            Point(1, 1),
+            Point(2, 1),
+            Point(2, 2),  # Z
+            Point(3, 3),
+            Point(2, 4),
+            Point(3, 4),
+            Point(4, 3),
+            Point(4, 2),  # W
+            Point(4, 5),
+            Point(5, 5),
+            Point(6, 5),
+            Point(5, 4),
+            Point(6, 4),  # P
+            Point(7, 3),
+            Point(7, 2),
+            Point(6, 2),
+            Point(6, 1),  # Z4
+            Point(1, 5),
+            Point(1, 6),
+            Point(2, 6),
+            Point(2, 7),
+            Point(3, 6),  # F
+        ]
+        corners = [
+            Point(3, 0),
+            Point(5, 0),
+            Point(7, 0),
+            Point(8, 1),
+            Point(8, 4),
+            Point(7, 6),
+            Point(4, 7),
+            Point(3, 8),
+            Point(1, 8),
+            Point(0, 7),
+            Point(0, 4),
+            Point(1, 3),
+            Point(-1, 2),  # trivial points outside the board
+            Point(-1, -1),
+            Point(1, -1),
+        ]
+        shape = Shape(origin=origin, points=frozenset(points))
+        self.assertEqual(shape.corners(), frozenset(corners))
