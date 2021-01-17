@@ -1,5 +1,5 @@
 """Functions and classes for Board pieces (shapes)"""
-from typing import FrozenSet, NamedTuple, Optional
+from typing import NamedTuple, Optional, Set
 
 from blokus.point import Point
 
@@ -8,11 +8,11 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
     """Container for the points that make up a board piece (shape)"""
 
     origin: Point
-    points: FrozenSet[Point]
+    points: Set[Point]
 
     def arrangements(
         self, lower: Optional[int] = None, upper: Optional[int] = None
-    ) -> FrozenSet["Shape"]:
+    ) -> Set["Shape"]:
         """
         Return all possible arrangements (rotation/reflection) of a shape.
 
@@ -46,15 +46,15 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         # whether the sides of the shapes are touching, and return this result.
         return self.sides().isdisjoint(other.points)
 
-    def corners(self) -> FrozenSet["Point"]:
-        """Return a frozenset of the corners of this Shape."""
-        corner_points = (p.corners() for p in self.points)
-        return frozenset.union(*corner_points) - self.sides() - self.points
+    def corners(self) -> Set["Point"]:
+        """Return a set of the corners of this Shape."""
+        all_corners = set.union(*(p.corners() for p in self.points))
+        return all_corners - self.sides() - self.points
 
-    def sides(self) -> FrozenSet["Point"]:
-        """Return a frozenset of the sides of this Shape."""
-        side_points = (p.sides() for p in self.points)
-        return frozenset.union(*side_points) - self.points
+    def sides(self) -> Set["Point"]:
+        """Return a set of the sides of this Shape."""
+        all_sides = set.union(*(p.sides() for p in self.points))
+        return all_sides - self.points
 
     def size(self) -> int:
         """Return the size of this shape (the number of points.)"""
@@ -64,14 +64,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
     def reflect(self, x: Optional[int] = None, y: Optional[int] = None) -> "Shape":
         """Return a new shape by reflecting over x and/or y lines."""
         origin = self.origin.reflect(x, y)
-        reflected = (point.reflect(x, y) for point in self.points)
-        return Shape(origin=origin, points=frozenset(reflected))
+        reflected = {point.reflect(x, y) for point in self.points}
+        return Shape(origin=origin, points=reflected)
 
     def rotate(self, around: Point, degrees: int) -> "Shape":
         """Return a new shape rotated by n degrees around a Point."""
         origin = self.origin.rotate(around, degrees)
-        rotated = (point.rotate(around, degrees) for point in self.points)
-        return Shape(origin=origin, points=frozenset(rotated))
+        rotated = {point.rotate(around, degrees) for point in self.points}
+        return Shape(origin=origin, points=rotated)
 
     @classmethod
     def I1(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -80,7 +80,7 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
 
         [X]
         """
-        return Shape(origin=origin, points=frozenset([origin]))
+        return Shape(origin=origin, points={origin})
 
     @classmethod
     def I2(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -89,8 +89,8 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
 
         [X][ ]
         """
-        points = [origin, Point(x=origin.x + 1, y=origin.y)]
-        return Shape(origin=origin, points=frozenset(points))
+        points = {origin, Point(x=origin.x + 1, y=origin.y)}
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def I3(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -99,12 +99,12 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
 
         [X][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def V3(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -114,12 +114,12 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         [ ]
         [X][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def I4(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -128,13 +128,13 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
 
         [X][ ][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
             Point(x=origin.x + 3, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def L4(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -144,13 +144,13 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         [ ]
         [X][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def O4(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -160,13 +160,13 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         [ ][ ]
         [X][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def T4(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -176,13 +176,13 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
            [ ]
         [ ][X][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x - 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def Z4(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -192,13 +192,13 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
            [ ][ ]
         [X][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y + 1),
             Point(x=origin.x + 2, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def F(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -209,14 +209,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
            [X][ ]
         [ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y + 1),
             Point(x=origin.x + 2, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y + 2),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def I5(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -225,14 +225,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
 
         [X][ ][ ][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
             Point(x=origin.x + 3, y=origin.y),
             Point(x=origin.x + 4, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def L5(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -242,14 +242,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         [ ]
         [X][ ][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
             Point(x=origin.x + 3, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def N(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -259,14 +259,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
               [ ][ ]
         [X][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
             Point(x=origin.x + 2, y=origin.y + 1),
             Point(x=origin.x + 3, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def P(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -276,14 +276,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
            [ ][ ]
         [X][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y + 1),
             Point(x=origin.x + 2, y=origin.y),
             Point(x=origin.x + 2, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def U(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -293,14 +293,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         [ ]   [ ]
         [ ][X][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x - 1, y=origin.y),
             Point(x=origin.x - 1, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def V5(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -311,14 +311,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         [ ]
         [X][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x, y=origin.y + 2),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def W(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -329,14 +329,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
            [X][ ]
         [ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x - 1, y=origin.y - 1),
             Point(x=origin.x, y=origin.y - 1),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def X(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -347,14 +347,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         [ ][X][ ]
            [ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x - 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x, y=origin.y - 1),
             Point(x=origin.x, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def Y(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -364,14 +364,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
            [ ]
         [ ][X][ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x - 1, y=origin.y),
             Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 2, y=origin.y),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
 
     @classmethod
     def Z5(cls, origin: Point) -> "Shape":  # pylint: disable=invalid-name
@@ -382,11 +382,11 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
            [X]
         [ ][ ]
         """
-        points = [
+        points = {
             origin,
             Point(x=origin.x - 1, y=origin.y - 1),
             Point(x=origin.x, y=origin.y - 1),
             Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y + 1),
-        ]
-        return Shape(origin=origin, points=frozenset(points))
+        }
+        return Shape(origin=origin, points=points)
