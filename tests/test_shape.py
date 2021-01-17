@@ -154,6 +154,6 @@ class TestShape(unittest.TestCase):
         self.assertTrue(shape.is_within(0, 20))
 
     def test_is_within_false(self):
-        """Test a shape that falls within a boundary"""
+        """Test a shape that falls outside a boundary"""
         shape = Shape.X(Point(0, 0))
         self.assertFalse(shape.is_within(0, 20))
