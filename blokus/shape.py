@@ -25,24 +25,25 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         Return a boolean indicating whether or not two shapes can connect.
 
         According to the rules of the game, two shapes can connect if they meet at a
-        corner, e.g. like the following. Therefore we must check two conditions:
-            1. Whether both shapes have corners that are points in the other shape
-            2. Whether neither shape shares a side with the other.
+        corner, e.g. like the following diagram shows. We must check two conditions:
+            1. If any of the first shape's corners are points in the second shape.
+            2. If any of the first shape's sides are points in the second shape.
+        Both conditions are reciprocal, so we can test only one direction each.
 
-        Here, X can connect to Y        Here, X cannot connect to Y
-        ------------------------        ---------------------------
-              [Y]                          [Y]
-              [Y][Y]                       [Y][Y]
-        [X][X]                          [X][X]
-           [X]                             [X]
+        X can connect to Y        X cannot connect to Y
+        ------------------        ---------------------
+              [Y]                    [Y]
+              [Y][Y]                 [Y][Y]
+        [X][X]                    [X][X]
+           [X]                       [X]
         """
         # do any of this shape's corners intersect with the other shape's points?
         # if not, we can return False right away; otherwise we will continue.
         if self.corners().isdisjoint(other.points):
             return False
 
-        # now we know the shapes share at least one cornerconnection. Now we test
-        # whether the sides of the shapes are touching. Return this result.
+        # now we know the shapes share at least one corner connection. We must test
+        # whether the sides of the shapes are touching, and return this result.
         return self.sides().isdisjoint(other.points)
 
     def corners(self) -> FrozenSet["Point"]:
