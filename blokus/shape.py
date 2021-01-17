@@ -47,7 +47,7 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         return self.sides().isdisjoint(other.points)
 
     def corners(self) -> Set["Point"]:
-        """Return a et of the corners of this Shape."""
+        """Return a set of the corners of this Shape."""
         all_corners = set.union(*(p.corners() for p in self.points))
         return all_corners - self.sides() - self.points
 

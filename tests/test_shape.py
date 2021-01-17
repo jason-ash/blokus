@@ -76,13 +76,7 @@ class TestShape(unittest.TestCase):
         origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.rotate(around=shape.origin, degrees=180)
-        points = {
-            Point(5, 5),
-            Point(6, 6),
-            Point(4, 4),
-            Point(4, 5),
-            Point(5, 6),
-        }
+        points = {Point(5, 5), Point(6, 6), Point(4, 4), Point(4, 5), Point(5, 6)}
         self.assertEqual(shape.points, points)
         self.assertEqual(shape.origin, origin)
 
@@ -91,13 +85,7 @@ class TestShape(unittest.TestCase):
         origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.reflect(x=8)
-        points = {
-            Point(12, 4),
-            Point(11, 4),
-            Point(11, 5),
-            Point(10, 5),
-            Point(10, 6),
-        }
+        points = {Point(12, 4), Point(11, 4), Point(11, 5), Point(10, 5), Point(10, 6)}
         self.assertEqual(shape.points, points)
         self.assertEqual(shape.origin, Point(11, 5))
 
