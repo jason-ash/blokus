@@ -113,48 +113,20 @@ class TestShape(unittest.TestCase):
         # [ ][ ][ ]         [ ]   [X]
         # [ ]      [X]   [X]   [X]
         origin = Point(0, 0)
+        # fmt: off
         points = [
-            Point(0, 0),
-            Point(0, 1),
-            Point(1, 1),
-            Point(2, 1),
-            Point(2, 2),  # Z
-            Point(3, 3),
-            Point(2, 4),
-            Point(3, 4),
-            Point(4, 3),
-            Point(4, 2),  # W
-            Point(4, 5),
-            Point(5, 5),
-            Point(6, 5),
-            Point(5, 4),
-            Point(6, 4),  # P
-            Point(7, 3),
-            Point(7, 2),
-            Point(6, 2),
-            Point(6, 1),  # Z4
-            Point(1, 5),
-            Point(1, 6),
-            Point(2, 6),
-            Point(2, 7),
-            Point(3, 6),  # F
+            Point(0, 0), Point(0, 1), Point(1, 1), Point(2, 1), Point(2, 2),  # Z
+            Point(3, 3), Point(2, 4), Point(3, 4), Point(4, 3), Point(4, 2),  # W
+            Point(4, 5), Point(5, 5), Point(6, 5), Point(5, 4), Point(6, 4),  # P
+            Point(1, 5), Point(1, 6), Point(2, 6), Point(2, 7), Point(3, 6),  # F
+            Point(7, 3), Point(7, 2), Point(6, 2), Point(6, 1),  # Z4
         ]
         corners = [
-            Point(3, 0),
-            Point(5, 0),
-            Point(7, 0),
-            Point(8, 1),
-            Point(8, 4),
-            Point(7, 6),
-            Point(4, 7),
-            Point(3, 8),
-            Point(1, 8),
-            Point(0, 7),
-            Point(0, 4),
-            Point(1, 3),
-            Point(-1, 2),  # trivial points outside the board
-            Point(-1, -1),
-            Point(1, -1),
+            Point(3, 0), Point(5, 0), Point(7, 0), Point(8, 1),
+            Point(8, 4), Point(7, 6), Point(4, 7), Point(3, 8),
+            Point(1, 8), Point(0, 7), Point(0, 4), Point(1, 3),
+            Point(-1, 2), Point(-1, -1), Point(1, -1),  # trivial points outside board
         ]
+        # fmt: on
         shape = Shape(origin=origin, points=frozenset(points))
         self.assertEqual(shape.corners(), frozenset(corners))
