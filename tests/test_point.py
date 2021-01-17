@@ -19,6 +19,22 @@ class TestPoint(unittest.TestCase):
         sides = [Point(5, 4), Point(4, 5), Point(3, 4), Point(4, 3)]
         self.assertEqual(point.sides(), frozenset(sides))
 
+    def test_is_corner(self):
+        """Test identifying whether two points are corners of each other"""
+        first, second, third = Point(4, 4), Point(5, 5), Point(4, 5)
+        self.assertTrue(first.is_corner(second))
+        self.assertTrue(second.is_corner(first))
+        self.assertFalse(first.is_corner(third))
+        self.assertFalse(third.is_corner(first))
+
+    def test_is_side(self):
+        """Test identifying whether two points are sides of each other"""
+        first, second, third = Point(4, 4), Point(5, 5), Point(4, 5)
+        self.assertTrue(first.is_side(third))
+        self.assertTrue(third.is_side(second))
+        self.assertFalse(first.is_side(second))
+        self.assertFalse(second.is_side(first))
+
     def test_reflect_x(self):
         """Test reflecting a point over a vertical line"""
         point = Point(4, 4)
