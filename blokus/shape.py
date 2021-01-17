@@ -20,6 +20,31 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         arrangements falling outside those bounds.
         """
 
+    def can_connect(self, other: "Shape") -> bool:
+        """
+        Return a boolean indicating whether or not two shapes can connect.
+
+        According to the rules of the game, two shapes can connect if they meet at a
+        corner, e.g. like the following. Therefore we must check two conditions:
+            1. Whether both shapes have corners that are points in the other shape
+            2. Whether neither shape shares a side with the other.
+
+        Here, X can connect to Y        Here, X cannot connect to Y
+        ------------------------        ---------------------------
+              [Y]                          [Y]
+              [Y][Y]                       [Y][Y]
+        [X][X]                          [X][X]
+           [X]                             [X]
+        """
+        # do any of this shape's corners intersect with the other shape's points?
+        # if not, we can return False right away; otherwise we will continue.
+        if self.corners().isdisjoint(other.points):
+            return False
+
+        # now we know the shapes share at least one cornerconnection. Now we test
+        # whether the sides of the shapes are touching. Return this result.
+        return self.sides().isdisjoint(other.points)
+
     def corners(self) -> FrozenSet["Point"]:
         """Return a frozenset of the corners of this Shape."""
         corner_points = (p.corners() for p in self.points)

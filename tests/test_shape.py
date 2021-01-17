@@ -100,3 +100,15 @@ class TestShape(unittest.TestCase):
         ]
         self.assertEqual(shape.points, frozenset(points))
         self.assertEqual(shape.origin, Point(11, 5))
+
+    def test_can_connect_true(self):
+        """Test two shapes that are allowed to connect"""
+        first = Shape.V3(Point(5, 5))
+        second = Shape.V3(Point(4, 4)).rotate(Point(4, 4), degrees=180)
+        self.assertTrue(first.can_connect(second))
+
+    def test_can_connect_false(self):
+        """Test two shapes that are not allowed to connect"""
+        first = Shape.V3(Point(5, 5))
+        second = Shape.V3(Point(5, 4)).rotate(Point(5, 4), degrees=180)
+        self.assertFalse(first.can_connect(second))
