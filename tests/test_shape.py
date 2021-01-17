@@ -41,6 +41,11 @@ class TestShape(unittest.TestCase):
         self.assertEqual(shape.rotate(around, 180).origin, origin.rotate(around, 180))
         self.assertEqual(shape.rotate(around, 270).origin, origin.rotate(around, 270))
 
+    def test_simple_arrangements(self):
+        """Test the arrangements of a shape with a single point"""
+        shape = Shape.I1(Point(4, 4))
+        self.assertEqual(shape.arrangements(), frozenset([shape]))
+
     def test_w_sides(self):
         """Test returning the sides of the W shape"""
         shape = Shape.W(Point(5, 5))
@@ -142,3 +147,13 @@ class TestShape(unittest.TestCase):
         first = Shape.V3(Point(5, 5))
         second = Shape.V3(Point(5, 4)).rotate(Point(5, 4), degrees=180)
         self.assertFalse(first.can_connect(second))
+
+    def test_is_within_true(self):
+        """Test a shape that falls within a boundary"""
+        shape = Shape.X(Point(1, 1))
+        self.assertTrue(shape.is_within(0, 20))
+
+    def test_is_within_false(self):
+        """Test a shape that falls within a boundary"""
+        shape = Shape.X(Point(0, 0))
+        self.assertFalse(shape.is_within(0, 20))

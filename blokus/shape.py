@@ -10,15 +10,52 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
     origin: Point
     points: FrozenSet[Point]
 
+    def is_within(
+        self, lower: Optional[int] = None, upper: Optional[int] = None
+    ) -> bool:
+        """
+        Return a boolean indicating if a shape is contained within a boundary.
+
+        If any of the shape's points fall outside the boundary, then return False.
+        """
+        if lower is None:
+            lower = min(min(p.x, p.y) for p in self.points)
+        if upper is None:
+            upper = max(max(p.x, p.y) for p in self.points)
+        return all(
+            (lower <= p.x <= upper) and (lower <= p.y <= upper) for p in self.points
+        )
+
     def arrangements(
         self, lower: Optional[int] = None, upper: Optional[int] = None
     ) -> FrozenSet["Shape"]:
         """
         Return all possible arrangements (rotation/reflection) of a shape.
 
-        Optionally specify a lower and upper bound which will restrict the
-        arrangements falling outside those bounds.
+        Optionally specify a lower and upper bound (inclusive) for the x and y axes,
+        which removes any arrangements that fall outside those bounds. (For example,
+        those that result in negative x or y values.)
         """
+        # we can create up to 8 different shapes by reflecting across one axis and
+        # rotating 90, 180, and 270 degrees. Then we return a frozenset of all unique
+        # shapes that are created by the different transformations.
+        transformations = [
+            self.rotate(around=self.origin, degrees=0),
+            self.rotate(around=self.origin, degrees=90),
+            self.rotate(around=self.origin, degrees=180),
+            self.rotate(around=self.origin, degrees=270),
+        ]
+        reflection = self.reflect(x=self.origin.x)
+        transformations += [
+            reflection.rotate(around=reflection.origin, degrees=0),
+            reflection.rotate(around=reflection.origin, degrees=90),
+            reflection.rotate(around=reflection.origin, degrees=180),
+            reflection.rotate(around=reflection.origin, degrees=270),
+        ]
+
+        # remove any transformations that fall outside the lower/upper boundaries
+        valid = (t for t in transformations if t.is_within(lower=lower, upper=upper))
+        return frozenset(valid)
 
     def can_connect(self, other: "Shape") -> bool:
         """
