@@ -41,10 +41,15 @@ class TestShape(unittest.TestCase):
         self.assertEqual(shape.rotate(around, 180).origin, origin.rotate(around, 180))
         self.assertEqual(shape.rotate(around, 270).origin, origin.rotate(around, 270))
 
+    def test_simple_arrangements(self):
+        """Test the arrangements of a shape with a single point"""
+        shape = Shape.I1(Point(4, 4))
+        self.assertEqual(shape.arrangements(), frozenset([shape]))
+
     def test_w_sides(self):
         """Test returning the sides of the W shape"""
         shape = Shape.W(Point(5, 5))
-        sides = {
+        sides = [
             Point(3, 4),
             Point(4, 3),
             Point(4, 5),
@@ -54,13 +59,13 @@ class TestShape(unittest.TestCase):
             Point(6, 7),
             Point(7, 5),
             Point(7, 6),
-        }
-        self.assertEqual(shape.sides(), sides)
+        ]
+        self.assertEqual(shape.sides(), frozenset(sides))
 
     def test_w_corners(self):
         """Test returning the corners of the W shape"""
         shape = Shape.W(Point(5, 5))
-        corners = {
+        corners = [
             Point(3, 3),
             Point(3, 5),
             Point(4, 6),
@@ -68,16 +73,22 @@ class TestShape(unittest.TestCase):
             Point(6, 3),
             Point(7, 4),
             Point(7, 7),
-        }
-        self.assertEqual(shape.corners(), corners)
+        ]
+        self.assertEqual(shape.corners(), frozenset(corners))
 
     def test_w_rotation(self):
         """Test rotating the W shape"""
         origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.rotate(around=shape.origin, degrees=180)
-        points = {Point(5, 5), Point(6, 6), Point(4, 4), Point(4, 5), Point(5, 6)}
-        self.assertEqual(shape.points, points)
+        points = [
+            Point(5, 5),
+            Point(6, 6),
+            Point(4, 4),
+            Point(4, 5),
+            Point(5, 6),
+        ]
+        self.assertEqual(shape.points, frozenset(points))
         self.assertEqual(shape.origin, origin)
 
     def test_w_reflection(self):
@@ -85,8 +96,14 @@ class TestShape(unittest.TestCase):
         origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.reflect(x=8)
-        points = {Point(12, 4), Point(11, 4), Point(11, 5), Point(10, 5), Point(10, 6)}
-        self.assertEqual(shape.points, points)
+        points = [
+            Point(12, 4),
+            Point(11, 4),
+            Point(11, 5),
+            Point(10, 5),
+            Point(10, 6),
+        ]
+        self.assertEqual(shape.points, frozenset(points))
         self.assertEqual(shape.origin, Point(11, 5))
 
     def test_complex_shape_corners(self):
@@ -102,22 +119,22 @@ class TestShape(unittest.TestCase):
         # [ ]      [X]   [X]   [X]
         origin = Point(0, 0)
         # fmt: off
-        points = {
+        points = [
             Point(0, 0), Point(0, 1), Point(1, 1), Point(2, 1), Point(2, 2),  # Z
             Point(3, 3), Point(2, 4), Point(3, 4), Point(4, 3), Point(4, 2),  # W
             Point(4, 5), Point(5, 5), Point(6, 5), Point(5, 4), Point(6, 4),  # P
             Point(1, 5), Point(1, 6), Point(2, 6), Point(2, 7), Point(3, 6),  # F
             Point(7, 3), Point(7, 2), Point(6, 2), Point(6, 1),  # Z4
-        }
-        corners = {
+        ]
+        corners = [
             Point(3, 0), Point(5, 0), Point(7, 0), Point(8, 1),
             Point(8, 4), Point(7, 6), Point(4, 7), Point(3, 8),
             Point(1, 8), Point(0, 7), Point(0, 4), Point(1, 3),
             Point(-1, 2), Point(-1, -1), Point(1, -1),  # trivial points outside board
-        }
+        ]
         # fmt: on
-        shape = Shape(origin=origin, points=points)
-        self.assertEqual(shape.corners(), corners)
+        shape = Shape(origin=origin, points=frozenset(points))
+        self.assertEqual(shape.corners(), frozenset(corners))
 
     def test_can_connect_true(self):
         """Test two shapes that are allowed to connect"""
@@ -130,3 +147,13 @@ class TestShape(unittest.TestCase):
         first = Shape.V3(Point(5, 5))
         second = Shape.V3(Point(5, 4)).rotate(Point(5, 4), degrees=180)
         self.assertFalse(first.can_connect(second))
+
+    def test_is_within_true(self):
+        """Test a shape that falls within a boundary"""
+        shape = Shape.X(Point(1, 1))
+        self.assertTrue(shape.is_within(0, 20))
+
+    def test_is_within_false(self):
+        """Test a shape that falls outside a boundary"""
+        shape = Shape.X(Point(0, 0))
+        self.assertFalse(shape.is_within(0, 20))
