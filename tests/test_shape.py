@@ -43,7 +43,7 @@ class TestShape(unittest.TestCase):
 
     def test_complex_sides(self):
         """Test returning the sides of a complex shape"""
-        shape = Shape.W(Point(4, 4))
+        shape = Shape.W(Point(5, 5))
         sides = [
             Point(3, 4),
             Point(4, 3),
@@ -59,7 +59,7 @@ class TestShape(unittest.TestCase):
 
     def test_complex_corners(self):
         """Test returning the corners of a complex shape"""
-        shape = Shape.W(Point(4, 4))
+        shape = Shape.W(Point(5, 5))
         corners = [
             Point(3, 3),
             Point(3, 5),
@@ -73,22 +73,22 @@ class TestShape(unittest.TestCase):
 
     def test_complex_rotation(self):
         """Test rotating a complex shape"""
-        origin = Point(4, 4)
+        origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.rotate(around=shape.origin, degrees=180)
         points = [
+            Point(5, 5),
+            Point(6, 6),
             Point(4, 4),
-            Point(3, 4),
-            Point(3, 3),
-            Point(2, 3),
-            Point(2, 2),
+            Point(4, 5),
+            Point(5, 6),
         ]
         self.assertEqual(shape.points, frozenset(points))
         self.assertEqual(shape.origin, origin)
 
     def test_complex_reflection(self):
         """Test reflecting a complex shape"""
-        origin = Point(4, 4)
+        origin = Point(5, 5)
         shape = Shape.W(origin)
         shape = shape.reflect(x=8)
         points = [
@@ -99,4 +99,4 @@ class TestShape(unittest.TestCase):
             Point(10, 6),
         ]
         self.assertEqual(shape.points, frozenset(points))
-        self.assertEqual(shape.origin, Point(12, 4))
+        self.assertEqual(shape.origin, Point(11, 5))

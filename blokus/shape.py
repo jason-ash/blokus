@@ -148,13 +148,13 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         Return the T4 shape.
 
            [ ]
-        [X][ ][ ]
+        [ ][X][ ]
         """
         points = [
             origin,
+            Point(x=origin.x - 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y),
-            Point(x=origin.x + 1, y=origin.y + 1),
-            Point(x=origin.x + 2, y=origin.y),
+            Point(x=origin.x, y=origin.y + 1),
         ]
         return Shape(origin=origin, points=frozenset(points))
 
@@ -180,8 +180,8 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         Return the F shape.
 
            [ ]
-           [ ][ ]
-        [X][ ]
+           [X][ ]
+        [ ][ ]
         """
         points = [
             origin,
@@ -265,14 +265,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         Return the U shape.
 
         [ ]   [ ]
-        [X][ ][ ]
+        [ ][X][ ]
         """
         points = [
             origin,
-            Point(x=origin.x, y=origin.y + 1),
+            Point(x=origin.x - 1, y=origin.y),
+            Point(x=origin.x - 1, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
-            Point(x=origin.x + 2, y=origin.y),
-            Point(x=origin.x + 2, y=origin.y + 1),
+            Point(x=origin.x + 1, y=origin.y + 1),
         ]
         return Shape(origin=origin, points=frozenset(points))
 
@@ -300,15 +300,15 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         Return the W shape.
 
               [ ]
-           [ ][ ]
-        [X][ ]
+           [X][ ]
+        [ ][ ]
         """
         points = [
             origin,
+            Point(x=origin.x - 1, y=origin.y - 1),
+            Point(x=origin.x, y=origin.y - 1),
             Point(x=origin.x + 1, y=origin.y),
             Point(x=origin.x + 1, y=origin.y + 1),
-            Point(x=origin.x + 2, y=origin.y + 1),
-            Point(x=origin.x + 2, y=origin.y + 2),
         ]
         return Shape(origin=origin, points=frozenset(points))
 
@@ -336,14 +336,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         Return the Y shape.
 
            [ ]
-        [X][ ][ ][ ]
+        [ ][X][ ][ ]
         """
         points = [
             origin,
+            Point(x=origin.x - 1, y=origin.y),
+            Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y),
-            Point(x=origin.x + 1, y=origin.y + 1),
             Point(x=origin.x + 2, y=origin.y),
-            Point(x=origin.x + 3, y=origin.y),
         ]
         return Shape(origin=origin, points=frozenset(points))
 
@@ -353,14 +353,14 @@ class Shape(NamedTuple):  # pylint: disable=too-many-public-methods
         Return the Z5 shape.
 
            [ ][ ]
-           [ ]
-        [X][ ]
+           [X]
+        [ ][ ]
         """
         points = [
             origin,
-            Point(x=origin.x + 1, y=origin.y),
+            Point(x=origin.x - 1, y=origin.y - 1),
+            Point(x=origin.x, y=origin.y - 1),
+            Point(x=origin.x, y=origin.y + 1),
             Point(x=origin.x + 1, y=origin.y + 1),
-            Point(x=origin.x + 1, y=origin.y + 1),
-            Point(x=origin.x + 2, y=origin.y + 2),
         ]
         return Shape(origin=origin, points=frozenset(points))
