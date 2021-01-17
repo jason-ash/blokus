@@ -1,5 +1,5 @@
 """Functions and classes related to Points on the board"""
-from typing import FrozenSet, NamedTuple, Optional
+from typing import NamedTuple, Optional, Set
 
 
 class Point(NamedTuple):
@@ -8,25 +8,23 @@ class Point(NamedTuple):
     x: int
     y: int
 
-    def corners(self) -> FrozenSet["Point"]:
-        """Return a frozenset of corners of a Point."""
-        points = [
+    def corners(self) -> Set["Point"]:
+        """Return a set of corners of a Point."""
+        return {
             Point(x=self.x + 1, y=self.y + 1),
             Point(x=self.x - 1, y=self.y + 1),
             Point(x=self.x - 1, y=self.y - 1),
             Point(x=self.x + 1, y=self.y - 1),
-        ]
-        return frozenset(points)
+        }
 
-    def sides(self) -> FrozenSet["Point"]:
-        """Return a frozenset of the sides of a Point."""
-        points = [
+    def sides(self) -> Set["Point"]:
+        """Return a set of the sides of a Point."""
+        return {
             Point(x=self.x + 1, y=self.y),
             Point(x=self.x, y=self.y + 1),
             Point(x=self.x - 1, y=self.y),
             Point(x=self.x, y=self.y - 1),
-        ]
-        return frozenset(points)
+        }
 
     def is_corner(self, other: "Point") -> bool:
         """Return a boolean indicating whether two points are corners of each other."""
